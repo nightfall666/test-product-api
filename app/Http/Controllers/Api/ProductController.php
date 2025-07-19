@@ -53,7 +53,11 @@ class ProductController extends Controller
             return response()->json(['error' => 'Invalid product ID'], 400);
         }
 
-        $product = Product::findOrFail($id);
+        $product = Product::find($id);
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
+
         return response()->json(new ProductResource($product), 200);
     }
 
@@ -63,7 +67,10 @@ class ProductController extends Controller
             return response()->json(['error' => 'Invalid product ID'], 400);
         }
 
-        $product = Product::findOrFail($id);
+        $product = Product::find($id);
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
         $product->update($request->validated());
         return response()->json(new ProductResource($product), 200);
     }
@@ -73,8 +80,10 @@ class ProductController extends Controller
         if (!is_numeric($id) || $id <= 0) {
             return response()->json(['error' => 'Invalid product ID'], 400);
         }
-
-        $product = Product::findOrFail($id);
+        $product = Product::find($id);
+        if (!$product) {
+            return response()->json(['error' => 'Product not found'], 404);
+        }
         $product->delete();
         return response()->json(['message' => 'Product deleted successfully'], 200);
     }
